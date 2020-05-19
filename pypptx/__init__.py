@@ -24,6 +24,8 @@ class PySlides(object):
             self.unitconv = Inches
         elif units == 'Cm':
             self.unitconv = Cm
+        else:
+            self.unitconv = Inches
         self.process_slides(slides)
         return self.prs
 
@@ -38,30 +40,30 @@ class PySlides(object):
         slide = self.prs.slides.add_slide(slide_layout)
         self.shapes = slide.shapes
 
-        for k, v in slide_data.iteritems():
+        for k, v in slide_data.items():
             if DEBUG:
-                print k, v
+                print( k, v)
             if hasattr(self, k):
                 method = getattr(self, k)
                 self.process_cmd(method, v)
 
     def process_cmd(self, method, args):
         if DEBUG:
-            print "process_cmd", method, args, self.level
+            print( "process_cmd", method, args, self.level)
         if isinstance(args, list):
             self.level+=1
             for arg in args:
                 if DEBUG:
-                    print "Process list item:", arg
+                    print( "Process list item:", arg)
                 self.process_cmd(method, arg)
             self.level-=1
         elif isinstance(args, dict):
             if DEBUG: 
-                print "Process dict item", args
+                print( "Process dict item", args)
             method(**args)
         else:
             if DEBUG: 
-                print "Process other:", args
+                print( "Process other:", args)
             method(args)
 
     def title(self, titlestr):
@@ -131,7 +133,7 @@ class PySlides(object):
 def show_layouts():
     prs = Presentation()
     for i, layout in enumerate(prs.slide_layouts):
-        print i, layout.name
+        print( i, layout.name)
 
 
 def main():
@@ -149,7 +151,7 @@ def main():
 
     file_name = args.file
     if not file_name:
-        parser.print_help()
+        parser.print(_help())
         exit()
 
     if file_name.endswith('.yml') or file_name.endswith('.yaml'):
